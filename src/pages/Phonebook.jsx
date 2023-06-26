@@ -25,7 +25,8 @@ const Phonebook = () => {
             dispatch(getContacts());
         });
     };
-    const searchedContacts = searchFunction(contacts, search)
+    const searchedContacts = searchFunction(contacts, search);
+    
     return (
         <div>
             <Form />
@@ -43,18 +44,19 @@ const Phonebook = () => {
             <h3>Contacts</h3>
             <ul>
                 {contacts.length > 0 &&
-                    searchedContacts.map(contact => (   
-                <li key={contact.id}>
-                    <p>{contact.name}</p>
-                    <p>{contact.phone}</p>
-                    <IconButton
-                        onClick={()=> onDelete(contact.id)}    
-                        aria-label="delete"
-                        size="small">
-                        <DeleteIcon fontSize="small" />
-                    </IconButton>
-                    </li>
-                ))}
+                    searchedContacts.map(contact => (
+                        <li key={contact.id}>
+                            <p>{contact.name}</p>
+                            <p>{contact.phone}</p>
+                            <IconButton
+                                onClick={() => onDelete(contact.id)}
+                                aria-label="delete"
+                                size="small">
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        </li>
+                    ))
+                }
             </ul>
         </div>
     )

@@ -1,23 +1,31 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-import { getPhonebook } from "redux/selectors";
-import { getContacts } from "redux/operators";
-import { TextField, IconButton } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { getFilter, getPhonebook } from "redux/selectors";
+import { deleteContacts, getContacts } from "redux/operators";
+import { searchContacts } from "redux/slice";
+import searchFunction from "utils/filter";
 
 import Form from "components/Form";
+
+import { TextField, IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Phonebook = () => {
     const dispatch = useDispatch();
     const contacts = useSelector(getPhonebook)
-    console.log(contacts);
+    const search = useSelector(getFilter);
     
     useEffect(() => {
         dispatch(getContacts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-
+    const onDelete = (id) => {
+        dispatch(deleteContacts(id)).then(() => {
+            dispatch(getContacts());
+        });
+    };
+    const searchedContacts = searchFunction(contacts, search)
     return (
         <div>
             <Form />
@@ -25,8 +33,8 @@ const Phonebook = () => {
             <TextField
                 type="text"
                 name='search'
-                onChange={ e => {}}
-                helperText="Please enter contact name to search"
+                onChange={ e => dispatch(searchContacts(e.target.value))}
+                helperText="Search contacts by name or number"
                 id="search"
                 label="search"
                 aria-describedby="my-helper-text"
@@ -35,11 +43,14 @@ const Phonebook = () => {
             <h3>Contacts</h3>
             <ul>
                 {contacts.length > 0 &&
-                    contacts.map(contact => (   
+                    searchedContacts.map(contact => (   
                 <li key={contact.id}>
                     <p>{contact.name}</p>
                     <p>{contact.phone}</p>
-                    <IconButton aria-label="delete" size="small">
+                    <IconButton
+                        onClick={()=> onDelete(contact.id)}    
+                        aria-label="delete"
+                        size="small">
                         <DeleteIcon fontSize="small" />
                     </IconButton>
                     </li>

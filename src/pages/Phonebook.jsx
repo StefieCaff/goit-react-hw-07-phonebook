@@ -8,8 +8,10 @@ import searchFunction from "utils/filter";
 
 import Form from "components/Form";
 
-import { TextField, IconButton } from "@mui/material";
+import { TextField, IconButton, Card, List, ListItem } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import Container from '@mui/material/Container';
 
 const Phonebook = () => {
     const dispatch = useDispatch();
@@ -28,38 +30,43 @@ const Phonebook = () => {
     const searchedContacts = searchFunction(contacts, search);
     
     return (
-        <div>
+        <section>
+            <Container maxWidth='xs'>
+                <h1>Phone Book</h1>
             <Form />
-            <label htmlFor="search"></label> 
-            <TextField
-                type="text"
-                name='search'
-                onChange={ e => dispatch(searchContacts(e.target.value))}
-                helperText="Search contacts by name or number"
-                id="search"
-                label="search"
-                aria-describedby="my-helper-text"
-                variant="filled"
-            />
-            <h3>Contacts</h3>
-            <ul>
-                {contacts.length > 0 &&
-                    searchedContacts.map(contact => (
-                        <li key={contact.id}>
-                            <p>{contact.name}</p>
-                            <p>{contact.phone}</p>
-                            <IconButton
-                                onClick={() => onDelete(contact.id)}
-                                aria-label="delete"
-                                size="small">
-                                <DeleteIcon fontSize="small" />
-                            </IconButton>
-                        </li>
-                    ))
-                }
-            </ul>
-        </div>
-    )
+            <Card>
+                <label htmlFor="search"></label> 
+                <TextField
+                    type="text"
+                    name='search'
+                    onChange={ e => dispatch(searchContacts(e.target.value))}
+                    helperText="Search contacts by name or number"
+                    id="search"
+                    label="Search"
+                    aria-describedby="my-helper-text"
+                    variant="standard"
+                />
+                <h3>Contacts</h3>
+                <List>
+                    {contacts.length > 0 ?
+                        searchedContacts.map(contact => (
+                            <ListItem key={contact.id}>
+                                <p>{contact.name}</p>
+                                <p>{contact.phone}</p>
+                                <IconButton
+                                    onClick={() => onDelete(contact.id)}
+                                    aria-label="delete"
+                                    size="small">
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
+                            </ListItem>
+                        )) :<p>There are not any contacts saved yet.</p>
+                    }
+                </List>
+            </Card>
+            </Container>
+        </section>
+       )
 };
 
 export default Phonebook;

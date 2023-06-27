@@ -41,3 +41,11 @@ img {
 a {
   text-decoration: none;
 }
+
+section {
+  padding: 20px 0;
+}
+
+p {
+  padding-right: 10px;
+}

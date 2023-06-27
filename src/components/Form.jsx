@@ -4,8 +4,9 @@ import { Notify } from 'notiflix';
 
 import { getContacts, postContacts } from 'redux/operators';
 import { getPhonebook } from 'redux/selectors';
-import { TextField, Fab } from "@mui/material";
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+
+import { TextField, Button, Card } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 const Form = () => {
     const [formData, setFormData] = useState({
@@ -39,10 +40,11 @@ const Form = () => {
     };
 
     return (
-
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="name"></label> 
-            <TextField
+        <section>
+            <Card>
+                <form onSubmit={handleSubmit}>
+                <label htmlFor="name"></label> 
+                <TextField
                 type="text"
                 name='name'
                 value={formData.name}
@@ -55,11 +57,11 @@ const Form = () => {
                 pattern="[A-Za-z\- ]{1,30}"
                 title="Name must contain minimum 1, maximum 30 characters. In this case characters include Upper and lowercase letters, apostrophe with following letter, and a max of two spaces between characters. For example: Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                 required
-                helperText="Please enter your name"
+                fullWidth={true}
                 id="name"
                 label="Name"
-                aria-describedby="my-helper-text"
-                variant="filled"
+                aria-describedby="Please enter your name"
+                variant="standard"
                 />
             <label htmlFor='number'></label>
             <TextField
@@ -75,17 +77,18 @@ const Form = () => {
                 pattern="[0-9\s+\-]{6,19}"
                 title="Phone number must be at least 6 digits max 19 digits. In this case digits include single spaces between numbers, dashes, parentheses and number can start with +"
                 required
-                helperText="Please enter your number "
+                fullWidth={true}
                 id="number"
                 label="Number"
-                aria-describedby="my-helper-text"
-                variant="filled"
-            />
-             <Fab color="secondary" aria-label="add-contact" type='submit'>
-                <PersonAddAlt1Icon/>
-            </Fab>
-            
-        </form>
+                aria-describedby="Please enter your number"
+                variant="standard"
+            />    
+            <Button color="secondary" fullWidth={true} aria-label="add-contact button" type='submit' variant="outlined" endIcon={<AddIcon/>}>
+                Add
+            </Button>
+          
+            </form></Card></section>
+    
     )
 };
 

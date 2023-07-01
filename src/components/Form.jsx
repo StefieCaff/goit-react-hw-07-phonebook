@@ -36,6 +36,11 @@ const Form = () => {
         }
         dispatch(postContacts(formData)).then(() => {
             dispatch(getContacts());
+            setFormData({
+                name: '',
+                number: ''
+            })
+            Notify.success(`${formData.name} has been added to your phonebook.`)
         });
     };
 

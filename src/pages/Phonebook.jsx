@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { Notify } from "notiflix";
 
 import { getFilter, getPhonebook } from "redux/selectors";
 import { deleteContacts, getContacts } from "redux/operators";
@@ -17,7 +18,7 @@ const Phonebook = () => {
     const dispatch = useDispatch();
     const contacts = useSelector(getPhonebook)
     const search = useSelector(getFilter);
-    
+    const searchedContacts = searchFunction(contacts, search);
     useEffect(() => {
         dispatch(getContacts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,9 +26,11 @@ const Phonebook = () => {
     const onDelete = (id) => {
         dispatch(deleteContacts(id)).then(() => {
             dispatch(getContacts());
+            const deletedContact =searchedContacts.find(searchedContact => searchedContact.id === id)
+            Notify.info(`${deletedContact.name} has been deleted from your phonebook`);
+            console.log(deletedContact, 'dC');
         });
     };
-    const searchedContacts = searchFunction(contacts, search);
     
     return (
         <section>
@@ -47,22 +50,25 @@ const Phonebook = () => {
                     variant="standard"
                 />
                 <h3>Contacts</h3>
-                <List>
-                    {contacts.length > 0 ?
-                        searchedContacts.map(contact => (
-                            <ListItem key={contact.id}>
-                                <p>{contact.name}</p>
-                                <p>{contact.phone}</p>
-                                <IconButton
-                                    onClick={() => onDelete(contact.id)}
-                                    aria-label="delete"
-                                    size="small">
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </ListItem>
-                        )) :<p>There are not any contacts saved yet.</p>
-                    }
-                </List>
+                {searchedContacts.length > 0 ?
+                    <List>
+                        {contacts.length > 0 ?
+                            searchedContacts.map(contact => (
+                                <ListItem key={contact.id}>
+                                    <p>{contact.name}</p>
+                                    <p>{contact.phone}</p>
+                                    <IconButton
+                                        onClick={() => onDelete(contact.id)}
+                                        aria-label="delete"
+                                        size="small">
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </ListItem>
+                            ))
+                            : <p>There are not any contacts saved yet.</p>
+                        }
+                    </List>
+                    : <p>There are no saved contacts that match your search .</p>}
             </Card>
             </Container>
         </section>
